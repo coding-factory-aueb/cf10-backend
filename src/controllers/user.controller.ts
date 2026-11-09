@@ -30,5 +30,16 @@ export const getOneByEmail = async(req: Request, res: Response, next: NextFuncti
 }
 
 export const create = async(req: Request, res:Response, next: NextFunction) =>{
-  
+  try{
+    const data = req.body;
+    console.log(">>>",data);
+
+    const result = await userService.createUser(data);
+    if (!result){
+      return res.status(404).json({message:"user not created"});
+    }
+    res.status(200).json(result);
+  } catch (err) {
+    next(err)
+  } 
 }
