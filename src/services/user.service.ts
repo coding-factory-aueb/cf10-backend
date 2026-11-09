@@ -12,3 +12,10 @@ export const findUsers = async()=> {
   console.log(">>>>>>>", users)
   return users;
 }
+
+export const findUserByEmail = async(email:string) =>{
+  const user = await userDao.findByEmail(email);
+  if (user) {
+    return user
+  }
+}
