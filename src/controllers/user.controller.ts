@@ -63,3 +63,19 @@ export const update = async(req: Request, res: Response, next: NextFunction) => 
   }
 }
 
+export const remove = async(req: Request, res: Response, next: NextFunction) =>{
+  try {
+    const param = req.params.username;
+    if (typeof param!="string"){
+      throw new Error("Expected one username as parameter")
+    }
+    const username: string = param;
+    const result = await userService.deleteUser(username);
+    if (!result) {
+      return res.status(404).json({message: "User not found"});
+    } 
+    return res.status(200).json({deleted: result});
+  } catch (err) {
+    next(err);
+  }
+}

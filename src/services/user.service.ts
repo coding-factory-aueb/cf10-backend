@@ -74,3 +74,8 @@ export const updateUser = async(username: string, payload:UpdateUserDTO) => {
   const user = await userDao.updateUser(username, updateData);
   return user;
 }
+
+export const deleteUser = async(username:string) => {
+  const user = await userDao.deleteUser(username);
+  return user;
+}

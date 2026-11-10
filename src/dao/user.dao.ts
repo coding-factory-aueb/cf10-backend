@@ -32,5 +32,5 @@ export const updateUser = async(username: string, payload: Partial<IUser>): Prom
 
 export const deleteUser = async(username: string): Promise<boolean> => {
   const result = await User.findOneAndDelete({username}).exec();
-  
+  return !!result
 }
