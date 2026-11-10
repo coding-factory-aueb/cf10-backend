@@ -1,6 +1,5 @@
-import { StringExpressionOperatorReturningBoolean } from 'mongoose';
-import { IRole } from '../models/role.model';
-import {IPhone} from '../models/user.model'
+import { Types } from 'mongoose';
+import { IRoleDTO } from './role.dto';
 
 export interface IPhoneDTO{
   type: string;
@@ -8,22 +7,20 @@ export interface IPhoneDTO{
 };
 
 export interface UserResponseDTO {
-  id: string;
+  _id: Types.ObjectId;
   username: string;
-  firstname: string;
-  lastname:string;
+  firstname?: string;
+  lastname?:string;
   email: string;
-  address: {
-    area: string;
-    street: string;
-    number: string;
-    po:string;
-    municipality: string;
+  address?: {
+    area?: string;
+    street?: string;
+    number?: string;
+    po?:string;
+    municipality?: string;
   },
-  phone: IPhoneDTO[];
-  // phone: IPhone[]
-  roles:string[];
-  // roles: IRole;
+  phone?: IPhoneDTO[];
+  roles:IRoleDTO[];
 }
 
 export interface CreateUserDTO {

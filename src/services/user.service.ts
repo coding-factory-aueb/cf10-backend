@@ -5,6 +5,9 @@ import { Types } from 'mongoose';
 import * as userDao from '../dao/user.dao';
 import { CreateUserDTO } from '../dto/user.dto';
 import { IUser } from '../models/user.model';
+import bcrypt from 'bcrypt';
+
+export const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || '5');
 
 // export const findUsers = async():Promise<IUser[]> => {
 export const findUsers = async()=> {
@@ -25,9 +28,14 @@ export const findUserByEmail = async(email:string) =>{
 
 export const createUser = async(payload:Partial<CreateUserDTO>) =>{
   
+  if (payload.password){
+    const hash = await bcrypt.hash(payload.password, SALT_ROUNDS);
+    payload.password = hash;
+  }
+
   let roleIds: Types.ObjectId[] = [];
   if (payload.roles && payload.roles.length>0) {
-    let rolesIds = payload.roles.map(id => new Types.ObjectId(id));
+    roleIds = payload.roles.map(id => new Types.ObjectId(id));
   } else {
     let reader: IRole | null = await Role.findOne({'role':'READER'});
     if (!reader) {
