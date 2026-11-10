@@ -10,6 +10,7 @@ export const validate = (schema: ZodSchema<any>) =>
         params: req.params
       };
       schema.parse(toValidate.body);
+      next();
     } catch (err:any){
       return res.status(400).json({message: err?.errors || err?.message || 'validation error'});
     }

@@ -14,7 +14,7 @@ export const phoneSchema = z.object({
 })
 
 export const createUserSchema = z.object({
-  username: z.string().min(3),
+  username: z.string().min(6),
   password: z.string().min(6),
   firstname: z.string().optional(),
   lastname: z.string().optional(),
