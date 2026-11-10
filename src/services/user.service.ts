@@ -3,7 +3,7 @@
 import Role, {IRole} from '../models/role.model';
 import { Types } from 'mongoose';
 import * as userDao from '../dao/user.dao';
-import { CreateUserDTO } from '../dto/user.dto';
+import { CreateUserDTO, UpdateUserDTO } from '../dto/user.dto';
 import { IUser } from '../models/user.model';
 import bcrypt from 'bcrypt';
 
@@ -53,3 +53,24 @@ export const createUser = async(payload:Partial<CreateUserDTO>) =>{
     return user
   }
 } 
+
+export const updateUser = async(username: string, payload:UpdateUserDTO) => {
+  const updateData: Partial<IUser> = {};
+
+  if (payload.firstname!==undefined) updateData.firstname = payload.firstname;
+  if (payload.lastname!==undefined) updateData.lastname = payload.lastname;
+  if (payload.email!==undefined) updateData.email = payload.email;
+  if (payload.address!==undefined) updateData.address = payload.address;
+  if (payload.phone!==undefined) updateData.phone = payload.phone;
+
+  if (payload.password) {
+    updateData.password = await bcrypt.hash(payload.password, SALT_ROUNDS);
+  }
+
+  if (payload.roles){
+    updateData.roles = payload.roles.map(id=>new Types.ObjectId(id));
+  }
+
+  const user = await userDao.updateUser(username, updateData);
+  return user;
+}

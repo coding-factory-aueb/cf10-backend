@@ -22,3 +22,15 @@ export const createUser = async (data: Partial<IUser>): Promise<IUser> => {
   const user = await new User(data).save()
   return user;
 }
+
+export const updateUser = async(username: string, payload: Partial<IUser>): Promise<IUser | null> => {
+  return await User.findOneAndUpdate({username:username}, payload)
+    .populate({path:"roles", model:Role})
+    .lean()
+    .exec()
+}
+
+export const deleteUser = async(username: string): Promise<boolean> => {
+  const result = await User.findOneAndDelete({username}).exec();
+  
+}

@@ -39,3 +39,19 @@ export interface CreateUserDTO {
   phone?:IPhoneDTO[];
   roles?:string[]
 }
+
+export interface UpdateUserDTO {
+  password?: string;
+  firstname?: string;
+  lastname?: string;
+  email?: string;
+  address?:{
+    area?: string;
+    street?: string;
+    number?: string;
+    po?:string;
+    municipality?:string;
+  };
+  phone?:IPhoneDTO[];
+  roles?: string[];
+}
