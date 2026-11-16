@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import { AuthPayload } from '../models/auth.model';
 import { IRoleDTO } from '../dto/role.dto';
 import Role from '../models/role.model';
+import { verifyGoogleIdToken } from '../utils/googleVerify';
 
 dotenv.config();
 
@@ -26,4 +27,17 @@ export const login = async(username:string, password:string) =>{
   }
   const token = jwt.sign(payload, JWT_SECRET, {expiresIn: JWT_EXPIRES});
   return {user, token} 
+}
+
+export const googleLogin = async(idToken:string) => {
+  try {
+    if (!idToken) {
+      return {status: false,message: 'Missing Token'}
+    }
+
+    const googleUser = await verifyGoogleIdToken(idToken);
+    console.log("GOOGLE USER>>", googleUser);
+  } catch (err){
+    return {status:false, message:err}
+  }
 }
