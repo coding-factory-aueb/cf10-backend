@@ -36,7 +36,34 @@ export const googleLogin = async(idToken:string) => {
     }
 
     const googleUser = await verifyGoogleIdToken(idToken);
-    console.log("GOOGLE USER>>", googleUser);
+    if (!googleUser.email_verified) {
+      return {status: false, message: "email not verified"}
+    }
+
+    if (!googleUser.email){
+      return {status: false, message: "Google account has no email"}
+    }
+
+    // If user do not exist in database, save user to database
+    let user = await User.findOne({emal: googleUser.email});
+    if (!user) {
+      console.log("user not exist", googleUser.email)
+    }
+
+    const token = jwt.sign(
+      {
+        username: googleUser.sub,
+        email: googleUser.email,
+        name: googleUser.name,
+        photo: googleUser.picture,
+        roles: [{}]
+      },
+      process.env.JWT_SECRET as string,
+      {expiresIn: '1h'}
+    )
+
+    // console.log("GOOGLE USER>>", googleUser);
+    return {status:true, token: token}
   } catch (err){
     return {status:false, message:err}
   }
